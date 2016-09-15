@@ -5,6 +5,16 @@ import re
 from collections import defaultdict
 
 
+def strip_punct(string):
+    to_strip = ' །༄༅༈'
+    string = string.strip()
+    string = string.strip(to_strip)
+    # adding a tsek if there is none
+    if not string.endswith('་'):
+        string += '་'
+    return string
+
+
 def find_no_space_after_tag(string):
     tags = re.findall(r'<[a-z]+ ?[^>]+>', string)
     for t in tags:
@@ -50,6 +60,14 @@ def apply_formatting(file_name, vol, string):
     heading += '<document name="{}" vol="{}" tibetan="true">\n'.format(vol_names[num], num)
 
     formatted = re.sub(r'(<[a-z]+ )([^>]+)(>)', r'\1name="\2"\3', string)
+    # formatting the notes : removing spaces and punctuation
+    splitted = re.split(r'"([^"]+)"', formatted)
+    # adding back the "
+    for f in range(len(splitted)):
+        if f % 2 != 0:
+            stripped = strip_punct(splitted[f])
+            splitted[f] = '"{}"'.format(stripped)
+    formatted = ''.join(splitted)
 
     # segmenting into pages
     out = ''
@@ -100,6 +118,8 @@ def generate_dtd(file_name, vol, string):
     for p in parts:
         tag = p[0]
         value = p[1]
+        # strip the punctuation
+        value = strip_punct(value)
         tags[tag].append(value)
 
     # preparing the output file
