@@ -101,8 +101,8 @@ def apply_formatting(file_name, vol, string):
             out += '\n[{}]'.format(str(page_num) + side)
 
     end = '</document>'
-
-    write_file(xml_path+file_name+'.xml', heading+out+end)
+    total = re.sub(r'[\(\)]', r'', heading+out+end)
+    write_file(xml_path+file_name+'.xml', total)
 
 
 def generate_dtd(file_name, vol, string):
