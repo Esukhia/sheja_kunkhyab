@@ -1,0 +1,75 @@
+FILE FORMAT SPECIFICATIONS:
+
+************************* BODY STRUCTURE *************************
+- have the extension XML
+- encoded in UTF-8 without BOM
+- the first line must be: <?xml version="1.0" encoding="UTF-8"?>
+- the second line must be: <document name="Here goest the document's name" vol="1">
+  - 'name' defines the name of the work
+  - 'vol' defines the volume number of the work
+- the last line must be: </document>
+
+************************* <DOCUMENT> STRUCTURE *************************
+inside the <document> tag (between the second and last line):
+- every line must start with the number of the page followed by the letter 'a' for front-side and 'b' for back-side and must be inside brackets (e.g.: [10a] means the front-side of the page 10)
+- only the following tags can be used in the document text:
+<dw>
+<tn>
+<yw>
+<dr>
+<gd>
+<l>
+<pj>
+<ds>
+<ts>
+<kd>
+<ns>
+- each tag must have the following structure: <tag name="Attribute"> (e.g.: <dw name="Attribute of the tag">)
+- if a tag has more than one attribute then they must be separated by commas (e.g.: <dw name="Attribute 1, Attribute 2, Attribute 3">)
+- each tag referred above must respectively be closed with:
+</dw>
+</tn>
+</yw>
+</dr>
+</gd>
+</l>
+</pj>
+</ds>
+</ts>
+</kd>
+</ns>
+
+************************* ASSOCIATED TAGS FILE *************************
+- each 'file.xml' must have a 'file_tags.xml' associated with. If a file is named 'kangyur-volume-1.xml' then the associated tags file should be named as 'kangyur-volume-1_tags.xml'
+- the tags file should have the start with:
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tags SYSTEM "struct/tags_template.dtd">
+
+- then it must be followed by the a <tags> tag containing the attribute 'ref'. This attribute indicates the name of the referred 'file.xml' (e.g.: <tags ref="kangyur-volume-1.xml"></tags>)
+- inside the <tags> tag, all the tags used in the 'file.xml' must be entered.
+for instance:
+<tags ref="kangyur-volume-1.xml">
+	<dw></dw>
+	<tn></tn>
+	<yw></yw>
+	<dr></dr>
+	<gd></gd>
+	<l></l>
+	<pj></pj>
+	<ds></ds>
+	<ts></ts>
+	<kd></kd>
+	<ns></ns>
+</tags>
+
+
+- Note that each tag can have several <name> tag that will define their attributes
+for instance:
+<dw>
+	<name>Attribute 1</name>
+	<name>Attribute 2</name>
+</dw>
+means that the tag <dw> can have the attributes 'Attribute 1' and 'Attribute 2'.
+So, in the work xml document, the followed will be accepted: <dw name="Attribute 1></dw>
+but this will not be: <dw name="Attribute 3></dw> because the 'Attribute 3' is not defined in the file
+
